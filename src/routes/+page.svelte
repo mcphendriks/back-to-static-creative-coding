@@ -6,7 +6,7 @@
   import ChartContinents from '../lib/components/chartContinents.svelte'
   import ChartRiverOcean from '../lib/components/chartRiverOcean.svelte'
   import SystemStatus from '../lib/components/system-status.svelte'
-
+  import { onMount } from 'svelte'
   export let data
 
   let showAnimation = false
@@ -20,55 +20,49 @@
   <title>Dashboard The Ocean Cleanup</title>
 </svelte:head>
 
-<section class="container">
-  <h1>{data.dataHygraph.dashboard.title}</h1>
+<section class="main">
+  <div class="container2">
+    <!-- Blue line -->
+    <div class="menu">
+      <div class="line" />
+    </div>
 
-  <TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
-  <TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
+    <!-- Title + Searchbar -->
+    <section class="header-dashboard">
+      <h1>{data.dataHygraph.dashboard.title}</h1>
+    </section>
 
-  <section class="panel box-3">
-    <ChartRiverOcean {data} />
-  </section>
+    <TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
+    <TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
 
-  <!-- Box 4: percentage in 2040 -->
-  <section class="panel box-4">
-    <h2>Plastic removed per continent</h2>
-    <ChartContinents {data} />
-  </section>
+    <!-- Box 3: percentage since 2013 -->
+    <section class="panel box-3">
+      <ChartRiverOcean {data} />
+    </section>
 
-  <!-- Grafiek: share swith icons -->
-  <section class="panel grafiek">
-    <Trashgraph {data} />
-  </section>
+    <!-- Box 4: percentage in 2040 -->
+    <section class="panel box-4">
+      <h2>Plastic removed per continent</h2>
+      <ChartContinents {data} />
+    </section>
 
-  <section class="map">
-    <Map {data} />
-  </section>
+    <!-- Grafiek: share swith icons -->
+    <section class="panel grafiek">
+      <Trashgraph {data} />
+    </section>
 
-  <Infotext data={data.dataHygraph.dashboard.infotext} />
+    <section class="map">
+      <Map {data} />
+    </section>
 
-  <SystemStatus {data} />
+    <Infotext data={data.dataHygraph.dashboard.infotext} />
 
-  <section class="panel more">
-    <h2>More about</h2>
-    <ul>
-      <li>
-        <a href="/">Our river technology</a>
-      </li>
-      <li>
-        <a href="/">The economic impact</a>
-      </li>
-      <li>
-        <a href="/">Plastic sources</a>
-      </li>
-      <li>
-        <a href="/">Donate</a>
-      </li>
-      <li>
-        <a href="/">Sign up for the newsletter</a>
-      </li>
-    </ul>
-  </section>
+    <SystemStatus {data} />
+
+    <!-- More: table more information links -->
+    <section class="panel more" />
+  </div>
+
   <div class="back-to-top-button">
     <a
       on:click={toggleAnimation}
@@ -77,6 +71,8 @@
       aria-label="scroll to top">back to top</a
     >
   </div>
+
+  <!-- WAVES -->
 
   <div class="waves-wrapper-container">
     <div class="waves-wrapper {showAnimation ? 'active' : ''}">
@@ -106,14 +102,14 @@
             x="48"
             y="3"
             fill="rgba(92, 200, 222, 0.5)
-				  "
+					"
           />
           <use
             xlink:href="#gentle-wave"
             x="48"
             y="5"
             fill="rgba(92, 200, 222, 0.3)
-				  "
+					"
           />
           <use xlink:href="#gentle-wave" x="48" y="7" fill="#5cc8de" />
         </g>
@@ -123,6 +119,113 @@
 </section>
 
 <style>
+  /* WAVES START */
+
+  .waves-wrapper-container {
+    position: absolute;
+    z-index: 100;
+    /* background: red; */
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  .waves-wrapper {
+    width: 100%;
+    position: absolute;
+    bottom: -285px;
+    left: 0;
+    background: #5cc8de;
+    animation: none;
+  }
+
+  .waves-wrapper.active {
+    animation: grow 18s linear infinite;
+  }
+
+  .waves {
+    position: relative;
+    width: 100%;
+    bottom: 141px; /* place the waves on top of the waves-wrapper */
+    margin-bottom: -7px;
+    min-height: 100px;
+    max-height: 150px;
+  }
+
+  /* Animation */
+
+  .parallax > use {
+    animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+  }
+  .parallax > use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+  }
+  .parallax > use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 10s;
+  }
+  .parallax > use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 13s;
+  }
+  .parallax > use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 20s;
+  }
+  @keyframes move-forever {
+    0% {
+      transform: translate3d(-90px, 0, 0);
+    }
+    100% {
+      transform: translate3d(85px, 0, 0);
+    }
+  }
+
+  @keyframes grow {
+    0% {
+      height: 0%;
+    }
+    20% {
+      height: 10%;
+    }
+    40% {
+      height: 30%;
+    }
+    60% {
+      height: 50%;
+    }
+    80% {
+      height: 70%;
+    }
+    100% {
+      height: 100%;
+    }
+  }
+  /*Shrinking for mobile*/
+  @media (max-width: 768px) {
+    .waves {
+      height: 40px;
+      min-height: 40px;
+    }
+  }
+
+  /* WAVES END */
+  .back-to-top-button a {
+    z-index: 999;
+    z-index: 999;
+    position: absolute;
+    bottom: 1%;
+    right: 3%;
+    padding: 2rem;
+    background-color: var(--lightBlue);
+    color: var(--whiteColor);
+    cursor: pointer;
+    border-radius: 0.5rem;
+  }
   /* Proxima font */
   @font-face {
     font-family: 'Proxima';
@@ -170,7 +273,7 @@
   }
 
   :global(html) {
-    /* font-size: 62.5%; */
+    font-size: 62.5%;
     scroll-behavior: smooth;
   }
 
@@ -187,23 +290,19 @@
     margin-bottom: 1rem;
   }
 
-  h3 {
-    font-size: 1.3rem;
-    font-weight: 500;
-  }
-
   a {
     text-decoration: none;
   }
 
   /* Grid */
-  .container {
+  .container2 {
     margin: 8rem 1.5rem 1.5rem 1.5rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     /* grid-template-rows: 0.01fr 0.1fr 1fr 1fr 0.5fr 0.8fr 0.5fr 0.5fr 1fr ; */
     gap: 1.2rem;
     grid-template-areas:
+      'menu menu'
       'header-dashboard header-dashboard'
       'box-1 box-2'
       'dashboard-info dashboard-info'
@@ -230,6 +329,10 @@
     grid-area: header-dashboard;
   }
 
+  .menu {
+    grid-area: menu;
+  }
+
   .grafiek {
     grid-area: grafiek;
   }
@@ -249,10 +352,6 @@
 
   .box-4 {
     grid-area: box-4;
-  }
-
-  .share {
-    grid-area: share;
   }
 
   .more {
@@ -291,79 +390,7 @@
     color: var(--darkBlue);
   }
 
-  /* more styling */
-  .more-link {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    gap: 2rem;
-    color: var(--textColor);
-    font-size: 1.5rem;
-    text-transform: capitalize;
-  }
-
-  .more-link:hover {
-    color: var(--lightBlue);
-  }
-
-  .more-icon {
-    font-size: 1.8rem;
-    color: var(--lightBlue);
-  }
-
-  .table-more {
-    border-collapse: collapse;
-  }
-
-  .more-row {
-    border-bottom: 0.5px solid var(--accentGray);
-    height: 4rem;
-  }
-
-  .arrow {
-    text-align: right;
-  }
-
   /* search bar */
-  .search {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .search-button {
-    max-width: 8rem;
-  }
-  .search input {
-    width: 130px;
-    height: 25px;
-    border-radius: 5px;
-    outline: none;
-    padding-left: 0.5rem;
-    background: var(--whiteColor);
-    box-shadow: var(--boxShadow) 0px 0px 8px;
-    border: none;
-    color: var(--textColor);
-  }
-
-  .search input::placeholder {
-    color: var(--darkBlue);
-    font-size: 1.3rem;
-  }
-
-  /* Scroll to top */
-  .scroll-top {
-    position: absolute;
-    bottom: 1%;
-    right: 2%;
-    width: 3rem;
-    height: 3rem;
-    padding: 0.5rem;
-    background-color: var(--lightBlue);
-    color: var(--whiteColor);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
 
   @keyframes progress {
     0% {
@@ -372,13 +399,14 @@
   }
 
   @media (min-width: 700px) {
-    .container {
+    .container2 {
       margin: 8rem 1.5rem 1.5rem 1.5rem;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       /* grid-template-rows: 0.01fr 0.1fr .5fr 1fr 1fr 1fr 1fr; */
       gap: 1.2rem;
       grid-template-areas:
+        'menu menu menu menu'
         'header-dashboard header-dashboard header-dashboard header-dashboard'
         'box-1 box-1 box-2 box-2'
         'dashboard-info dashboard-info map map'
@@ -390,11 +418,12 @@
   }
 
   @media (min-width: 992px) {
-    .container {
-      margin: 3rem 2rem 2rem 18rem;
+    .container2 {
+      margin: 5rem 2rem 2rem 22.3rem;
       grid-template-columns: repeat(6, 1fr);
       /* grid-template-rows: 0.01fr 0.1fr 0.3fr 0.4fr 0.4fr 0.6fr; */
       grid-template-areas:
+        'menu menu menu menu menu menu'
         'header-dashboard header-dashboard header-dashboard header-dashboard header-dashboard header-dashboard'
         'box-1 box-1 box-1 box-2 box-2 box-2'
         'dashboard-info dashboard-info map map map map'
@@ -430,42 +459,6 @@
     .box-4,
     h2 {
       font-size: 1.5rem;
-    }
-
-    .more h2 {
-      font-size: 1.8rem;
-    }
-
-    .share h2 {
-      font-size: 1.8rem;
-    }
-
-    .line {
-      height: 2px;
-      width: 6%;
-      background-color: var(--lightBlue);
-    }
-
-    .search input {
-      width: 190px;
-    }
-
-    .scroll-top {
-      display: none;
-    }
-
-    .amount h4 {
-      color: var(--lightBlue);
-      font-weight: 500;
-      font-size: 1.8rem;
-    }
-
-    h3 {
-      font-size: 1.5rem;
-    }
-
-    tr {
-      height: 3.3rem;
     }
   }
 </style>
