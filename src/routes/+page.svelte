@@ -1,76 +1,126 @@
 <script>
-	import Infotext from '../lib/components/infotext.svelte';
-	import TrashRemoved from '../lib/components/trash-removed.svelte';
-	import Map from '../lib/components/map.svelte';
-	import Trashgraph from '../lib/components/trashGraph.svelte';
-	import ChartContinents from '../lib/components/chartContinents.svelte';
-	import ChartRiverOcean from '../lib/components/chartRiverOcean.svelte';
-	import SystemStatus from '../lib/components/system-status.svelte';
+  import Infotext from '../lib/components/infotext.svelte'
+  import TrashRemoved from '../lib/components/trash-removed.svelte'
+  import Map from '../lib/components/map.svelte'
+  import Trashgraph from '../lib/components/trashGraph.svelte'
+  import ChartContinents from '../lib/components/chartContinents.svelte'
+  import ChartRiverOcean from '../lib/components/chartRiverOcean.svelte'
+  import SystemStatus from '../lib/components/system-status.svelte'
 
-	export let data;
+  export let data
 
+  let showAnimation = false
+
+  function toggleAnimation() {
+    showAnimation = !showAnimation
+  }
 </script>
 
 <svelte:head>
-	<title>Dashboard The Ocean Cleanup</title>
+  <title>Dashboard The Ocean Cleanup</title>
 </svelte:head>
 
-
 <section class="container">
+  <h1>{data.dataHygraph.dashboard.title}</h1>
 
-	<h1>{data.dataHygraph.dashboard.title}</h1>
-		
-	<TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
-	<TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
+  <TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
+  <TrashRemoved data={data.dataApi.totals} text={data.dataHygraph} />
 
-		<section class="panel box-3">
-			<ChartRiverOcean {data} />
-		</section>
+  <section class="panel box-3">
+    <ChartRiverOcean {data} />
+  </section>
 
-		<!-- Box 4: percentage in 2040 -->
-		<section class="panel box-4">
-			<h2>Plastic removed per continent</h2>
-			<ChartContinents {data} />
-		</section>
+  <!-- Box 4: percentage in 2040 -->
+  <section class="panel box-4">
+    <h2>Plastic removed per continent</h2>
+    <ChartContinents {data} />
+  </section>
 
-		<!-- Grafiek: share swith icons -->
-		<section class="panel grafiek">
-			<Trashgraph {data} />
-		</section>
+  <!-- Grafiek: share swith icons -->
+  <section class="panel grafiek">
+    <Trashgraph {data} />
+  </section>
 
-		<section class="map">
-			<Map {data} />
-		</section>
+  <section class="map">
+    <Map {data} />
+  </section>
 
-		<Infotext data={data.dataHygraph.dashboard.infotext} />
+  <Infotext data={data.dataHygraph.dashboard.infotext} />
 
-		<SystemStatus {data} />
+  <SystemStatus {data} />
 
-		<section class="panel more">
-			<h2>More about</h2>
-			<ul>
-				<li>
-					<a href="/">Our river technology</a>
-				</li>
-				<li>
-					<a href="/">The economic impact</a>
-				</li>
-				<li>
-					<a href="/">Plastic sources</a>
-				</li>
-				<li>
-					<a href="/">Donate</a>
-				</li>
-				<li>
-					<a href="/">Sign up for the newsletter</a>
-				</li>
-			</ul>
-		</section>
+  <section class="panel more">
+    <h2>More about</h2>
+    <ul>
+      <li>
+        <a href="/">Our river technology</a>
+      </li>
+      <li>
+        <a href="/">The economic impact</a>
+      </li>
+      <li>
+        <a href="/">Plastic sources</a>
+      </li>
+      <li>
+        <a href="/">Donate</a>
+      </li>
+      <li>
+        <a href="/">Sign up for the newsletter</a>
+      </li>
+    </ul>
+  </section>
+  <div class="back-to-top-button">
+    <a
+      on:click={toggleAnimation}
+      href="/"
+      id="scroll-top-button"
+      aria-label="scroll to top">back to top</a
+    >
+  </div>
 
-	</section>
-
-<a href="#top" class="scroll-top" aria-label="scroll to top"></a>
-
+  <div class="waves-wrapper-container">
+    <div class="waves-wrapper {showAnimation ? 'active' : ''}">
+      <svg
+        class="waves"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 24 150 28"
+        preserveAspectRatio="none"
+        shape-rendering="auto"
+      >
+        <defs>
+          <path
+            id="gentle-wave"
+            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+          />
+        </defs>
+        <g class="parallax">
+          <use
+            xlink:href="#gentle-wave"
+            x="48"
+            y="0"
+            fill="rgba(92, 200, 222, 0.7)"
+          />
+          <use
+            xlink:href="#gentle-wave"
+            x="48"
+            y="3"
+            fill="rgba(92, 200, 222, 0.5)
+				  "
+          />
+          <use
+            xlink:href="#gentle-wave"
+            x="48"
+            y="5"
+            fill="rgba(92, 200, 222, 0.3)
+				  "
+          />
+          <use xlink:href="#gentle-wave" x="48" y="7" fill="#5cc8de" />
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
 
 <style>
 	/* Proxima font */
